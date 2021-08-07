@@ -1,8 +1,18 @@
+.FormWrapper {
+	width: 100vw;
+	height: 80vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
 
-.FormWrapper{
-  width: 100vw;
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.title {
+	padding-bottom: 30px;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.blank {
+	padding-bottom: 30px;
 }

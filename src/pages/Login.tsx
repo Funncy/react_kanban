@@ -1,9 +1,10 @@
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, Alert } from 'antd';
 import './Login.css';
 import AuthService from '../services/AuthService';
 import { UserState } from '../atom/AuthAtom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import firebase from 'firebase';
+import { useState } from 'react';
 
 interface IloginForm {
 	username: string;
@@ -11,26 +12,39 @@ interface IloginForm {
 	remember: boolean;
 }
 
-function Login() {
+function Login(): JSX.Element {
 	const authService = new AuthService();
 	const setUser = useSetRecoilState<firebase.User | null>(UserState);
+	const [error, setError] = useState<string>('');
 	//아이디 비밀번호 기억 쿠키에 저장하던지 처리 해줘야함.
 	const onFinish = async (values: IloginForm) => {
 		try {
 			const user = await authService.emailSignIn(values.username, values.password);
-			setUser(user);
+			const result = Object.assign({}, user);
+			setUser(result);
 		} catch (e) {
-			console.log('Error');
+			setError(e.message);
 		}
 	};
 
 	//TODO: 에러 처리 해줘야함.
 	const onFinishFailed = (errorInfo: any) => {
-		console.log('Failed:', errorInfo);
+		setError(errorInfo);
+	};
+
+	const onClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		setError('');
 	};
 
 	return (
 		<div className="FormWrapper">
+			<span className="title">로그인</span>
+			{error === '' ? (
+				''
+			) : (
+				<Alert message="Error" description={error} type="error" closable onClose={onClose} />
+			)}
+			<span className="blank"></span>
 			<Form
 				name="basic"
 				labelCol={{ span: 8 }}

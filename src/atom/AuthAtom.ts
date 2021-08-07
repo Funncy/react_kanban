@@ -1,8 +1,10 @@
-import { atom, selector, selectorFamily } from 'recoil';
+import { atom } from 'recoil';
 import firebase from 'firebase';
-import AuthService from '../services/AuthService';
 
-export const UserState = atom<firebase.User | null>({
+type AuthState = firebase.User | null;
+
+export const UserState = atom<AuthState>({
 	key: 'firebaseUser',
 	default: null,
+	dangerouslyAllowMutability: true,
 });
